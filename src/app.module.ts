@@ -15,31 +15,25 @@ import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 
-
 @Module({
   imports: [
-
     ConfigModule.forRoot(),
 
     GraphQLModule.forRootAsync({
       driver: ApolloDriver,
-      imports: [ AuthModule ],
-      inject: [ JwtService ],
-      useFactory: async( jwtService: JwtService ) => ({
+      imports: [AuthModule],
+      inject: [JwtService],
+      useFactory: async (jwtService: JwtService) => ({
         playground: false,
-        autoSchemaFile: join( process.cwd(), 'src/schema.gql'), 
-        plugins: [
-          ApolloServerPluginLandingPageLocalDefault
-        ],
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        plugins: [ApolloServerPluginLandingPageLocalDefault],
         context({ req }) {
           // const token = req.headers.authorization?.replace('Bearer ','');
           // if ( !token ) throw Error('Token needed');
-
           // const payload = jwtService.decode( token );
           // if ( !payload ) throw Error('Token not valid');
-          
-        }
-      })
+        },
+      }),
     }),
 
     // TODO: configuración básica
@@ -47,7 +41,7 @@ import { CommonModule } from './common/common.module';
     //   driver: ApolloDriver,
     //   // debug: false,
     //   playground: false,
-    //   autoSchemaFile: join( process.cwd(), 'src/schema.gql'), 
+    //   autoSchemaFile: join( process.cwd(), 'src/schema.gql'),
     //   plugins: [
     //     ApolloServerPluginLandingPageLocalDefault
     //   ]

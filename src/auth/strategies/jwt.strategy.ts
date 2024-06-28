@@ -7,31 +7,24 @@ import { User } from '../../users/entities/user.entity';
 import { JwtPayload } from '../intefaces/jwt-payload.interface';
 import { AuthService } from '../auth.service';
 
-
 @Injectable()
-export class JwtStrategy extends PassportStrategy( Strategy ) {
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    private readonly authService: AuthService,
 
-    constructor(
-        private readonly authService: AuthService,
+    configService: ConfigService,
+  ) {
+    super({
+      secretOrKey: configService.get('JWT_SECRET'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    });
+  }
 
-        configService: ConfigService
-    ) {
+  async validate(payload: JwtPayload): Promise<User> {
+    const { id } = payload;
 
-        super({
-            secretOrKey: configService.get('JWT_SECRET'),
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-        })
-    }
+    const user = await this.authService.validateUser(id);
 
-    async validate( payload: JwtPayload ): Promise<User> {
-
-        const { id } = payload;
-        
-        const user = await this.authService.validateUser( id );
-
-        return user; // req.user
-
-    }
-
-
+    return user; // req.user
+  }
 }

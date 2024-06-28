@@ -10,33 +10,29 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { ValidRoles } from './enums/valid-roles.enum';
 
-@Resolver( () => AuthResponse )
+@Resolver(() => AuthResponse)
 export class AuthResolver {
+  constructor(private readonly authService: AuthService) {}
 
-  constructor(
-    private readonly authService: AuthService
-  ) {}
-
-  @Mutation( () => AuthResponse , { name: 'signup' })
+  @Mutation(() => AuthResponse, { name: 'signup' })
   async signup(
-    @Args('signupInput') signupInput: SignupInput
+    @Args('signupInput') signupInput: SignupInput,
   ): Promise<AuthResponse> {
-    return this.authService.signup( signupInput );
+    return this.authService.signup(signupInput);
   }
 
-  @Mutation( () => AuthResponse , { name: 'login' })
+  @Mutation(() => AuthResponse, { name: 'login' })
   async login(
-    @Args('loginInput') loginInput: LoginInput
+    @Args('loginInput') loginInput: LoginInput,
   ): Promise<AuthResponse> {
-    return this.authService.login( loginInput );
+    return this.authService.login(loginInput);
   }
 
-  @Query( () => AuthResponse, { name: 'revalite'})
-  @UseGuards( JwtAuthGuard )
+  @Query(() => AuthResponse, { name: 'revalite' })
+  @UseGuards(JwtAuthGuard)
   revalidateToken(
-    @CurrentUser( /**[ ValidRoles.admin ] */  ) user: User
+    @CurrentUser(/**[ ValidRoles.admin ] */) user: User,
   ): AuthResponse {
-    return this.authService.revalidateToken( user );
+    return this.authService.revalidateToken(user);
   }
-
 }

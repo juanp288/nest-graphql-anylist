@@ -9,10 +9,6 @@ import { SeedResolver } from './seed.resolver';
 
 @Module({
   providers: [SeedResolver, SeedService],
-  imports: [
-    ConfigModule,
-    ItemsModule,
-    UsersModule,
-  ]
+  imports: [ConfigModule, ItemsModule, UsersModule],
 })
 export class SeedModule {}

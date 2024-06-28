@@ -13,16 +13,16 @@ import { PaginationArgs, SearchArgs } from './../common/dto/args';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Resolver(() => Item)
-@UseGuards( JwtAuthGuard )
+@UseGuards(JwtAuthGuard)
 export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Mutation(() => Item, { name: 'createItem' })
   async createItem(
     @Args('createItemInput') createItemInput: CreateItemInput,
-    @CurrentUser() user: User
+    @CurrentUser() user: User,
   ): Promise<Item> {
-    return this.itemsService.create( createItemInput, user );
+    return this.itemsService.create(createItemInput, user);
   }
 
   @Query(() => [Item], { name: 'items' })
@@ -31,30 +31,29 @@ export class ItemsResolver {
     @Args() paginationArgs: PaginationArgs,
     @Args() searchArgs: SearchArgs,
   ): Promise<Item[]> {
-
-    return this.itemsService.findAll( user, paginationArgs, searchArgs );
+    return this.itemsService.findAll(user, paginationArgs, searchArgs);
   }
 
   @Query(() => Item, { name: 'item' })
   async findOne(
-    @Args('id', { type: () => ID }, ParseUUIDPipe ) id: string,
-    @CurrentUser() user: User
+    @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
   ): Promise<Item> {
-    return this.itemsService.findOne(id, user );
+    return this.itemsService.findOne(id, user);
   }
 
   @Mutation(() => Item)
   updateItem(
     @Args('updateItemInput') updateItemInput: UpdateItemInput,
-    @CurrentUser() user: User
-  ):Promise<Item> {
-    return this.itemsService.update( updateItemInput.id, updateItemInput, user );
+    @CurrentUser() user: User,
+  ): Promise<Item> {
+    return this.itemsService.update(updateItemInput.id, updateItemInput, user);
   }
 
   @Mutation(() => Item)
   removeItem(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: User
+    @CurrentUser() user: User,
   ): Promise<Item> {
     return this.itemsService.remove(id, user);
   }
